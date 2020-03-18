@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ReignTest</string>
+    <string name="app_name">CAMIOtest</string>
     <string name="back">&lt; Back</string>
     <string name="baseUrl">https://api.themoviedb.org/3/movie/</string>
     <string name="notUrl">Url not available</string>

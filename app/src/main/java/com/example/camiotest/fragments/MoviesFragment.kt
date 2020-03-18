@@ -26,6 +26,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_movies.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -35,25 +37,30 @@ class MoviesFragment : Fragment() {
     lateinit var movieList:List<MoviePojo>
     lateinit var adapter: MoviesAdapter
     lateinit var mContext: Context
+    var url:String="popular"
 
     companion object {
-        fun newInstance(): MoviesFragment {
-            return MoviesFragment()
+        @JvmStatic
+        fun newInstance(url: String) = MoviesFragment().apply {
+            arguments = Bundle().apply {
+                putString("url", url)
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext= this!!.requireContext()
-
-
+        arguments?.getString("url")?.let {
+            url = it
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view:View = inflater.inflate(R.layout.fragment_movies, container, false)
-        if(checkInternet())searchPopularMovies()
+        if(checkInternet())searchMovies(url)
         else checkDatabase()
 
         return view
@@ -109,10 +116,17 @@ class MoviesFragment : Fragment() {
             .build()
     }
 
-    private fun searchPopularMovies() {
+    private fun searchMovies(url:String) {
         doAsync {
             try {
-                val call = getRetrofit().create(APIService::class.java).getPopularMovies().execute()
+                lateinit var call: Response<MoviesPojo>
+                if (url.equals("popular"))
+                    call = getRetrofit().create(APIService::class.java).getPopularMovies().execute()
+                else if(url.equals("upcoming"))
+                    call = getRetrofit().create(APIService::class.java).getUpcomingMovies().execute()
+                else if(url.equals("top_rated"))
+                    call = getRetrofit().create(APIService::class.java).getTopRatedMovies().execute()
+
                 val movies = call.body() as MoviesPojo
                 uiThread {
                     if(movies.movies.isNotEmpty()) {
@@ -168,7 +182,7 @@ class MoviesFragment : Fragment() {
 
             swipeRefreshLayout.setOnRefreshListener {
                 if(checkInternet()){
-                    searchPopularMovies()
+                    searchMovies(url)
                 }else{
                     Toast.makeText(mContext,getString(R.string.refreshi),
                         Toast.LENGTH_LONG).show()

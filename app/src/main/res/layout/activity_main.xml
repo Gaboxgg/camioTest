@@ -13,4 +13,11 @@
         android:layout_height="match_parent"
         class = "com.example.camiotest.fragments.MoviesFragment"
         />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:menu="@layout/bottom_navigation_menu"
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemBackground="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

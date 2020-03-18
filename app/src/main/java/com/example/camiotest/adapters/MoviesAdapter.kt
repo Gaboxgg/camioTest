@@ -1,6 +1,8 @@
 package com.example.camiotest.adapters
 
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +11,8 @@ import com.example.camiotest.R
 import com.example.camiotest.data.MoviePojo
 import kotlinx.android.synthetic.main.item_movie.view.*
 import java.text.SimpleDateFormat
-
 import java.util.*
+
 
 class MoviesAdapter (var movies: List<MoviePojo>, val listener: (MoviePojo) -> Unit) : RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
 
@@ -31,10 +33,17 @@ class MoviesAdapter (var movies: List<MoviePojo>, val listener: (MoviePojo) -> U
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(movie: MoviePojo) {
-            itemView.text.text="${movie.title}  \\n ${movie.overview} \\n ${movie.release_date}"
+            itemView.text.text="${movie.title}  \n \n  ${movie.overview} \n \n ${movie.release_date}"
             Glide.with(itemView)  //2
                 .load("https://image.tmdb.org/t/p/w500${movie.poster_path}?api_key=0bda8a0480d0c29189aa581a42c8000d") //3
                 .into(itemView.image) //8
+            itemView.text.movementMethod = ScrollingMovementMethod()
+            itemView.text.setOnTouchListener(object : View.OnTouchListener {
+                override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                    itemView.text.getParent().requestDisallowInterceptTouchEvent(true)
+                    return false;
+                }
+            })
             itemView.setOnClickListener { listener(movie) }
         }
 
