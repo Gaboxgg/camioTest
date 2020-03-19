@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.example.camiotest.MainActivity
 import com.example.camiotest.R
 import com.example.camiotest.data.MoviePojo
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import org.jetbrains.anko.*
 
@@ -33,6 +35,7 @@ class MovieDetailFragment : Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as MainActivity?)?.changeNavVisibility(View.GONE)
         arguments?.getSerializable("movie")?.let {
             movie = it as MoviePojo
         }
@@ -56,10 +59,12 @@ class MovieDetailFragment : Fragment(){
                 .diskCacheStrategy(DiskCacheStrategy.ALL))
             .into(fragment_image) //8
 
-        var str:String = "${movie.original_title} - ${movie.release_date} - ${movie.original_language}" +
-                " \n Popularidad: ${movie.popularity} \n" +
-                "Voto promedio: ${movie.vote_average}/10 Cantidad de votos: ${movie.vote_count} \n" +
-                "Resumen: \n\n ${movie.overview}"
+        var str:String = "${movie.original_title} \n \n" +
+                "Release Date: ${movie.release_date} \n" +
+                "Original Language: ${movie.original_language}" +
+                " \n Popularity: ${movie.popularity} \n" +
+                "Avg Vote: ${movie.vote_average}/10 Vote Count: ${movie.vote_count} \n \n" +
+                "Resume: \n\n ${movie.overview}"
         fragment_info.movementMethod = ScrollingMovementMethod()
         fragment_info.text=str
     }

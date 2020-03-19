@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.camiotest.fragments.MoviesFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(){
@@ -38,7 +40,12 @@ class MainActivity : AppCompatActivity(){
         name = "movieList"
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.fragment, fragment, name)
+            .replace(R.id.fragment, fragment, name)
             .commit()
+    }
+
+    fun changeNavVisibility(view:Int){
+        val bottom: BottomNavigationView = findViewById(R.id.bottom_navigation_view)
+        bottom.visibility=view
     }
 }

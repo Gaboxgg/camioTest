@@ -63,9 +63,11 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.google.android.material:material:1.1.0'
 
+    //glide
     implementation 'com.github.bumptech.glide:glide:4.4.0'
     kapt 'com.github.bumptech.glide:compiler:4.4.0'
 
+    //design
     implementation 'com.android.support:design:29.0.0'
 }
 
