@@ -8,6 +8,7 @@
     >
 
     <LinearLayout
+
         android:background="@drawable/cardview_border"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,10 +21,13 @@
             android:scaleType="centerCrop"/>
 
         <TextView
+            android:layout_marginBottom="5sp"
+            android:background="@android:color/black"
             android:scrollbars = "vertical"
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@android:color/white"
             android:layout_marginStart="5sp"
             android:layout_gravity="center_horizontal"
             android:textSize="14sp"/>

@@ -26,7 +26,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_movies.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -154,24 +153,17 @@ class MoviesFragment : Fragment() {
 
     private fun initTemplate(movieList: List<MoviePojo>) {
         if(movieList.isNotEmpty()) {
-            adapter = MoviesAdapter(movieList) { hit ->
-                val url: String = "if (hit.url != null) hit.url else hit.story_url"
-                if (url == null)
-                    Toast.makeText(activity, getString(R.string.notUrl), Toast.LENGTH_LONG).show()
-                else {
-                    if(checkInternet()) {
-                        val fragment: Fragment = WebviewFragment.newInstance(url)
-                        activity?.supportFragmentManager
-                            ?.beginTransaction()
-                            ?.addToBackStack(url)
-                            ?.add(R.id.fragment, fragment, url)
-                            ?.commit()
-                    }else{
-                        Toast.makeText(mContext,getString(R.string.internet),
-                            Toast.LENGTH_LONG).show()
-                    }
+            adapter = MoviesAdapter(movieList) { movie ->
+
+                    val fragment: Fragment = MovieDetailFragment.newInstance(movie)
+                    activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.addToBackStack(movie.id)
+                        ?.add(R.id.fragment, fragment, movie.id)
+                        ?.commit()
+
                 }
-            }
+
             rvHits.setHasFixedSize(true)
             rvHits.layoutManager = LinearLayoutManager(mContext)
             rvHits.adapter = adapter

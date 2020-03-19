@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     >
 
-    <item android:title="Popular" android:id="@+id/action_popular" />
-    <item android:title="Top Rated" android:id="@+id/action_top" />
-    <item android:title="Upcoming" android:id="@+id/action_upcoming"/>
+    <item android:title="Popular" android:icon="@drawable/ic_popular" android:id="@+id/action_popular" />
+    <item android:title="Top Rated" android:icon="@drawable/ic_top" android:id="@+id/action_top" />
+    <item android:title="Upcoming" android:icon="@drawable/ic_upcoming" android:id="@+id/action_upcoming"/>
 
 </menu>

@@ -4,9 +4,11 @@
             <item>
                 <shape>
 <!--                    <corners android:radius="8sp" />-->
+
                     <stroke android:width="2sp" android:color="@color/colorPrimary" />
                 </shape>
             </item>
+
         </layer-list>
     </item>
 </selector>

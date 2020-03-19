@@ -1,6 +1,7 @@
 package com.example.camiotest.data
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class MoviePojo (@SerializedName ("popularity") var popularity:String="",
                       @SerializedName("vote_count") var vote_count:String="",
@@ -16,4 +17,4 @@ data class MoviePojo (@SerializedName ("popularity") var popularity:String="",
                       @SerializedName  ("overview") var overview:String="",
                       @SerializedName  ("release_date") var release_date:String=""
 //                      @SerializedName  ("objectID") var objectID:String=""
-)
+) : Serializable

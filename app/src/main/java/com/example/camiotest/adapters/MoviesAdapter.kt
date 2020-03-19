@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.camiotest.R
 import com.example.camiotest.data.MoviePojo
 import kotlinx.android.synthetic.main.item_movie.view.*
@@ -36,7 +38,10 @@ class MoviesAdapter (var movies: List<MoviePojo>, val listener: (MoviePojo) -> U
             itemView.text.text="${movie.title}  \n \n  ${movie.overview} \n \n ${movie.release_date}"
             Glide.with(itemView)  //2
                 .load("https://image.tmdb.org/t/p/w500${movie.poster_path}?api_key=0bda8a0480d0c29189aa581a42c8000d") //3
+                .apply( RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(itemView.image) //8
+
             itemView.text.movementMethod = ScrollingMovementMethod()
             itemView.text.setOnTouchListener(object : View.OnTouchListener {
                 override fun onTouch(v: View?, event: MotionEvent?): Boolean {
