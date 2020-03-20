@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <item android:title="Popular" android:icon="@drawable/ic_popular" android:id="@+id/action_popular" />
+    <item android:title="Top Rated" android:icon="@drawable/ic_top" android:id="@+id/action_top" />
+    <item android:title="Upcoming" android:icon="@drawable/ic_upcoming" android:id="@+id/action_upcoming"/>
+    <item android:title="Favorite" android:icon="@drawable/ic_fav" android:id="@+id/action_fav"/>
+
+</menu>

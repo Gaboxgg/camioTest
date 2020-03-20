@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">camioTest</string>
+    <string name="app_name">CAMIOtest</string>
+    <string name="back">&lt; Back</string>
+    <string name="baseUrl">https://api.themoviedb.org/3/movie/</string>
+    <string name="notUrl">Url not available</string>
+    <string name="internet">You need an Internet connection</string>
+    <string name="refreshi">You need Internet for refresh</string>
+    <string name="noRecord">No record available</string>
+    <string name="tryAgain">Empty list or error,try again later&#8230;</string>
+    <string name="addFavMovie">Movie was added to fav list</string>
+    <string name="delFavMovie">Movie was removed from  fav list</string>
 </resources>
