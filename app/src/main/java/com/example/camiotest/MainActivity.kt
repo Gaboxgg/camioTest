@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity(){
                     selectFragment("upcoming")
                     true
                 }
+                 R.id.action_fav -> {
+                    selectFragment("fav")
+                    true
+                }
                 else -> false
             }
         }

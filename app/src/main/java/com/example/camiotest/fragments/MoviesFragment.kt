@@ -61,7 +61,9 @@ class MoviesFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view:View = inflater.inflate(R.layout.fragment_movies, container, false)
-        if(checkInternet())searchMovies(url)
+
+        if(url.equals("fav")) checkDatabase()
+        else if(checkInternet())searchMovies(url)
         else checkDatabase()
         return view
     }
@@ -74,6 +76,8 @@ class MoviesFragment : Fragment() {
                         movieList=movies
                         initTemplate(movieList)
                     }else{
+                        movieList = mutableListOf(MoviePojo())
+                        rvHits.visibility=View.INVISIBLE
                         showErrorDialog()
                     }
                 }
@@ -190,6 +194,80 @@ class MoviesFragment : Fragment() {
             }
             cursor.close()
         }
+
+        if(url.equals("upcoming")) {
+            val cursor = dbHandler.getAllUpMovies()
+            cursor!!.moveToFirst()
+
+            while (cursor.moveToNext()) {
+                try {
+                    var pojo: MoviePojo = MoviePojo()
+                    pojo.id = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))))
+                    pojo.popularity =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_POPULARITY))))
+                    pojo.vote_count =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VOTE_COUNT))))
+                    pojo.video = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VIDEO))))
+                    pojo.poster_path =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_POSTER_PATH))))
+                    pojo.adult = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ADULT))))
+                    pojo.backdrop_path =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BACKDROP_PATH))))
+                    pojo.original_language =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ORIGINAL_LANGUAGE))))
+                    pojo.original_title =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ORIGINAL_TITLE))))
+                    pojo.vote_average =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VOTE_AVG))))
+                    pojo.overview =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OVERVIEW))))
+                    pojo.release_date =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_RELEASE_DATE))))
+                    pojo.title = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TITLE))))
+                    returnList.add(pojo)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+            }
+            cursor.close()
+        }
+
+        if(url.equals("fav")) {
+            val cursor = dbHandler.getAllFavMovies()
+            cursor!!.moveToFirst()
+
+            while (cursor.moveToNext()) {
+                try {
+                    var pojo: MoviePojo = MoviePojo()
+                    pojo.id = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))))
+                    pojo.popularity =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_POPULARITY))))
+                    pojo.vote_count =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VOTE_COUNT))))
+                    pojo.video = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VIDEO))))
+                    pojo.poster_path =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_POSTER_PATH))))
+                    pojo.adult = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ADULT))))
+                    pojo.backdrop_path =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BACKDROP_PATH))))
+                    pojo.original_language =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ORIGINAL_LANGUAGE))))
+                    pojo.original_title =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ORIGINAL_TITLE))))
+                    pojo.vote_average =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VOTE_AVG))))
+                    pojo.overview =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OVERVIEW))))
+                    pojo.release_date =
+                        ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_RELEASE_DATE))))
+                    pojo.title = ((cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TITLE))))
+                    returnList.add(pojo)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+            }
+            cursor.close()
+        }
         if(returnList.count()==1) {
             return emptyList()
         }
@@ -247,6 +325,8 @@ class MoviesFragment : Fragment() {
     }
 
 
+
+
     private fun refreshDatabase(movieList: List<MoviePojo>) {
         val dbHandler = DBHelper(mContext, null)
         if(url.equals("popular")) {
@@ -268,7 +348,38 @@ class MoviesFragment : Fragment() {
             }
         }
     }
+    private fun initDefaultTemplate() {
+        adapter = MoviesAdapter(movieList) { movie ->
 
+            val fragment: Fragment = MovieDetailFragment.newInstance(movie)
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.addToBackStack(movie.id)
+                ?.replace(R.id.fragment, fragment, movie.id)
+                ?.commit()
+
+        }
+
+        rvHits.setHasFixedSize(true)
+        rvHits.layoutManager = LinearLayoutManager(mContext)
+        rvHits.adapter = adapter
+        adapter.notifyDataSetChanged()
+
+        if(url!="fav")enableSwipeToFav()
+
+        if(swipeRefreshLayout.isRefreshing)swipeRefreshLayout.isRefreshing = false
+
+        swipeRefreshLayout.setOnRefreshListener {
+            if(checkInternet()){
+                searchMovies(url)
+                swipeRefreshLayout.isRefreshing = false
+            }else{
+                Toast.makeText(mContext,getString(R.string.refreshi),
+                    Toast.LENGTH_LONG).show()
+                swipeRefreshLayout.isRefreshing = false
+            }
+        }
+    }
     private fun initTemplate(movieList: List<MoviePojo>) {
         if(movieList.isNotEmpty()) {
             adapter = MoviesAdapter(movieList) { movie ->
@@ -285,8 +396,10 @@ class MoviesFragment : Fragment() {
             rvHits.setHasFixedSize(true)
             rvHits.layoutManager = LinearLayoutManager(mContext)
             rvHits.adapter = adapter
+            adapter.notifyDataSetChanged()
 
-//            enableSwipeToDelete()
+            if(url!="fav")enableSwipeToFav()
+            else enableSwipeToDelete()
 
             if(swipeRefreshLayout.isRefreshing)swipeRefreshLayout.isRefreshing = false
 
@@ -313,4 +426,54 @@ class MoviesFragment : Fragment() {
         super.onResume()
         (activity as MainActivity?)?.changeNavVisibility(View.VISIBLE)
     }
+
+    private fun enableSwipeToFav() {
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback(requireContext()!!,R.drawable.ic_fav) {
+            override fun onSwiped(@NonNull viewHolder: RecyclerView.ViewHolder, i: Int) {
+
+
+                val position = viewHolder.adapterPosition
+                val item = adapter!!.getData().get(position)
+
+
+                val dbHandler = DBHelper(mContext, null)
+                dbHandler.addFavMovie(item)
+
+                val snack = Snackbar.make(constraintLayout, getString(R.string.addFavMovie), Snackbar.LENGTH_LONG)
+
+
+                snack.setActionTextColor(Color.YELLOW)
+                snack.show()
+
+            }
+        }
+        val itemTouchhelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchhelper.attachToRecyclerView(rvHits)
+    }
+
+    private fun enableSwipeToDelete() {
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback(requireContext()!!,R.drawable.trash_icon) {
+            override fun onSwiped(@NonNull viewHolder: RecyclerView.ViewHolder, i: Int) {
+
+
+                val position = viewHolder.adapterPosition
+                val item = adapter!!.getData().get(position)
+
+                adapter!!.removeItem(position)
+
+                val dbHandler = DBHelper(mContext, null)
+                dbHandler.deleteFavMovie(item.id.toInt())
+
+                val snack = Snackbar.make(constraintLayout, getString(R.string.delFavMovie), Snackbar.LENGTH_LONG)
+
+
+                snack.setActionTextColor(Color.YELLOW)
+                snack.show()
+
+            }
+        }
+        val itemTouchhelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchhelper.attachToRecyclerView(rvHits)
+    }
+
 }

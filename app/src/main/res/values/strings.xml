@@ -6,6 +6,7 @@
     <string name="internet">You need an Internet connection</string>
     <string name="refreshi">You need Internet for refresh</string>
     <string name="noRecord">No record available</string>
-    <string name="tryAgain">Error,try again later&#8230;</string>
-    <string name="removeHit">Hit was removed from the list.</string>
+    <string name="tryAgain">Empty list or error,try again later&#8230;</string>
+    <string name="addFavMovie">Movie was added to fav list</string>
+    <string name="delFavMovie">Movie was removed from  fav list</string>
 </resources>

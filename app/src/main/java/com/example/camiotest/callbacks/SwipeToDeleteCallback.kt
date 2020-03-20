@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.camiotest.R
 
 
-abstract class SwipeToDeleteCallback (internal var mContext: Context) : ItemTouchHelper.Callback() {
+abstract class SwipeToDeleteCallback (internal var mContext: Context,@DrawableRes id:Int) : ItemTouchHelper.Callback() {
     private val mClearPaint: Paint = Paint()
     private val mBackground: ColorDrawable = ColorDrawable()
     private val backgroundColor: Int = Color.parseColor("#FFFFFF")
@@ -22,7 +23,7 @@ abstract class SwipeToDeleteCallback (internal var mContext: Context) : ItemTouc
 
     init {
         mClearPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-        deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.trash_icon)!!
+        deleteDrawable = ContextCompat.getDrawable(mContext, id)!!
         intrinsicWidth = deleteDrawable.intrinsicWidth
         intrinsicHeight = deleteDrawable.intrinsicHeight
 
