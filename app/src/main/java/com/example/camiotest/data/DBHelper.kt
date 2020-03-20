@@ -81,6 +81,7 @@ class DBHelper(context: Context,
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PO)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TO)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_UP)
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_FA)
         onCreate(db)
     }
     fun addPopularMovie(movie: MoviePojo) {
